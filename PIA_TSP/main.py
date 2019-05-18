@@ -24,34 +24,39 @@ DATASETS = [
 
 def setData():
 
-	global data, LIMIT, VISIT_TIME, POINTS
+	for d in DATASETS:
 
-	X = []
-	Y = []
+		global data, LIMIT, VISIT_TIME, POINTS, TOTAL_TIME
 
-	f = open("./Datasets_PIA_TSO_TSP/150_sitios_480.txt")
-	for i, l in enumerate(f.readlines()):
-		data.append(l.strip().split('\t'))
+		POINTS = np.array((10, 2))
+		LIMIT = 0
+		del VISIT_TIME[:]
+		TOURS = []
+		TOTAL_TIME = 0
 
-		if i >= 5:
-			X.append(int(data[i][1]))
-			Y.append(int(data[i][2]))
-			VISIT_TIME.append(int(data[i][3]))
-	
-	r = np.array(X)
-	s = np.array(Y)
+		X = []
+		Y = []
+		del data[:]
 
-	# Set global data
+		f = open("./Datasets_PIA_TSO_TSP/"+d+".txt")
+		for i, l in enumerate(f.readlines()):
+			data.append(l.strip().split('\t'))
 
-	POINTS = np.column_stack((X, Y))
-	POINTS.reshape(len(POINTS),2)
-	LIMIT = int((data[1][1]))
-	VISIT_TIME[0] = 0
+			if i >= 5:
+				X.append(int(data[i][1]))
+				Y.append(int(data[i][2]))
+				VISIT_TIME.append(int(data[i][3]))
 
-	f.close()
+		POINTS = np.column_stack((X, Y))
+		POINTS.reshape(len(POINTS),2)
+		LIMIT = int((data[1][1]))
+		VISIT_TIME[0] = 0
 
-	# Call function
-	nearestNeighbor()
+		f.close()
+
+		print('Datasets: ',d)
+		print('---------------\n')
+		nearestNeighbor()
 
 
 def nearestNeighbor():
@@ -112,8 +117,6 @@ def timeController(tsp,eu):
 	tour = []
 	day = 0
 	time = 0
-	# print(tsp)
-	# print(eu)
 
 	for i in range(0,(len(tsp)-1)):
 
@@ -153,10 +156,6 @@ def timeController(tsp,eu):
 	print('\n')
 	print('Total days: ', day)
 	print('Total min: ', TOTAL_TIME)
-
-
-
-
-
+	print('\n')
 
 setData()
