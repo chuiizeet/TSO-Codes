@@ -154,7 +154,7 @@ def timeController(tsp,eu):
 	TOTAL_TIME += totalTime
 
 	print('\n')
-	print('Total days: ', day)
+	print('Total days: ', day+1)
 	print('Total min: ', TOTAL_TIME)
 	print('\n')
 
