@@ -2,11 +2,14 @@ import numpy as np
 from scipy.spatial import distance
 import matplotlib.pyplot as plt
 import math
+import plot
 
 # Globals
 
 data = [] 
 POINTS = np.array((10,2))
+X = []
+Y = []
 LIMIT = 0
 VISIT_TIME = []
 TOURS = []
@@ -26,11 +29,12 @@ def setData():
 
 	for d in DATASETS:
 
-		global data, LIMIT, VISIT_TIME, POINTS, TOTAL_TIME
+		global data, LIMIT, VISIT_TIME, POINTS, TOTAL_TIME, TOURS, X, Y
 
 		POINTS = np.array((10, 2))
 		LIMIT = 0
 		del VISIT_TIME[:]
+		del TOURS[:]
 		TOURS = []
 		TOTAL_TIME = 0
 
@@ -112,7 +116,7 @@ def nearestNeighbor():
 
 def timeController(tsp,eu):
 
-	global TOTAL_TIME
+	global TOTAL_TIME, X, Y, TOURS
 
 	tour = []
 	day = 0
@@ -139,8 +143,9 @@ def timeController(tsp,eu):
 			totalTime = time - VISIT_TIME[i] - eu[i] + dst_return
 
 			TOTAL_TIME += totalTime
-
 			print('Day '+str(day) + ': ', tour, ' Time:', totalTime)
+			TOURS.append(tour.copy())
+			
 			del tour[:]
 			tour.append(0)
 			tour.append(tsp[i])
@@ -150,6 +155,7 @@ def timeController(tsp,eu):
 	tour.insert(len(tour),0)
 	totalTime = time + VISIT_TIME[i] + dst_return
 	print('Day '+str(day) + ': ', tour, ' Time:', totalTime)
+	TOURS.append(tour.copy())
 
 	TOTAL_TIME += totalTime
 
@@ -157,5 +163,7 @@ def timeController(tsp,eu):
 	print('Total days: ', day+1)
 	print('Total min: ', TOTAL_TIME)
 	print('\n')
+	
+	plot.plot(X,Y,TOURS)
 
 setData()
